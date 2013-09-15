@@ -1,9 +1,9 @@
 GIT
   remote: git://github.com/kml/jruby-hornetq.git
-  revision: 7cb0e7015cc9ff69a80301206a0acb4a4bde829b
-  branch: hornetq-2.2.21.final
+  revision: cfad61c6ad074d9b0afbe729aa7b5336904a55f3
+  branch: hornetq-2.3.0.cr1
   specs:
-    jruby-hornetq (0.4.0)
+    jruby-hornetq (0.5.0.alpha)
       gene_pool (~> 1.3.0)
 
 GIT
@@ -23,8 +23,8 @@ PATH
       jruby-hornetq
       puma (~> 2.5.1)
       quartz-jruby
-      torquebox-core (~> 2.3.2)
-      torquebox-messaging (~> 2.3.2)
+      torquebox-core (~> 3.0.0)
+      torquebox-messaging (~> 3.0.0)
 
 GEM
   remote: https://rubygems.org/
@@ -52,13 +52,13 @@ GEM
     rake (10.1.0)
     thread_safe (0.1.2-java)
       atomic
-    torquebox-core (2.3.2-java)
-    torquebox-messaging (2.3.2-java)
+    torquebox-core (3.0.0-java)
       edn (= 1.0.0)
-      torquebox-core (= 2.3.2)
-      torquebox-transactions (= 2.3.2)
-    torquebox-transactions (2.3.2)
-      torquebox-core (= 2.3.2)
+    torquebox-messaging (3.0.0-java)
+      torquebox-core (= 3.0.0)
+      torquebox-transactions (= 3.0.0)
+    torquebox-transactions (3.0.0)
+      torquebox-core (= 3.0.0)
     tzinfo (0.3.37)
 
 PLATFORMS

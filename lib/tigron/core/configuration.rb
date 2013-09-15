@@ -38,6 +38,23 @@ module Tigron
           properties.each do |(processor_name, processor_options)|
             processor_options[:processor] = processor_name.to_s.constantize
             processor_options[:concurrency] ||= 1
+            Integer(processor_options[:concurrency])
+            processor_options[:selector] ||= ""
+
+            raise "singleton: true is not supported" if processor_options[:singleton] == true
+            processor_options[:singleton] = false if processor_options[:singleton].nil?
+
+            raise "durable: true is not supported" if processor_options[:durable] == true
+            processor_options[:durable] = false if processor_options[:durable].nil?
+
+            raise "xa: true is not supported" if processor_options[:xa] == true
+            processor_options[:xa] = false if processor_options[:xa].nil?
+
+            raise "stopped: true is not supported" if processor_options[:stopped] == true
+            processor_options[:stopped] = false if processor_options[:stopped].nil?
+
+            raise "synchronous: true is not supported" if processor_options[:synchronous] == true
+            processor_options[:synchronous] = false if processor_options[:synchronous].nil?
           end
         end
       end

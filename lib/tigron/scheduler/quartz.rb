@@ -4,12 +4,6 @@ require 'java'
 require 'jruby'
 require 'jruby/core_ext'
 
-require 'slf4j-api-1.7.2'
-require 'slf4j-simple-1.7.2'
-require 'log4j-over-slf4j-1.7.2'
-
-require 'quartz-2.2.0'
-
 module Tigron
   module Scheduler
     module Quartz

@@ -31,9 +31,13 @@ module Tigron
   end
 
   def self.logger
-    @logger ||= HornetQ.ruby_logger(::Logger::DEBUG, Rails.root.join('log/server.log').to_s).tap do |l|
+    @logger ||= HornetQ.ruby_logger(::Logger::DEBUG, Rails.root.join('log/tigron.log').to_s).tap do |l|
       l.formatter = Logger::Formatter.new
     end
+  end
+
+  def self.logger=(logger)
+    @logger = logger
   end
 
   def self.configuration
@@ -76,7 +80,8 @@ module Tigron
   end
 
   def self.add_service(name, service)
-    service_name = TorqueBox::MSC.deployment_unit.service_name.append(name)
+    service_name = name.respond_to?(:append) ? name : TorqueBox::MSC.deployment_unit.service_name.append(name)
+
     service_builder = TorqueBox::Registry['service-registry'].add_service(service_name, service)
     service_builder.install
   end
