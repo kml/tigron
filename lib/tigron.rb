@@ -67,6 +67,12 @@ module Tigron
     service_builder.install
   end
 
+  def self.unregister_job(job_name)
+    service_name = TorqueBox::MSC.deployment_unit.service_name.append('scheduled_job').append(job_name)
+    service_controller = TorqueBox::MSC.get_service(service_name)
+    service_controller.mode = org.jboss.msc.service.ServiceController::Mode::REMOVE
+  end
+
   def self.register_service(name, properties)
     service = ServiceProxy.new(name.to_s, properties)
 
