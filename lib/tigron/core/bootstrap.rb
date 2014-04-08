@@ -3,7 +3,10 @@
 module Tigron
   class Bootstrap
     def initialize!
-      return unless Tigron.run_tigron?
+      unless Tigron.run_tigron?
+        Tigron.logger.info "Tigron is not enabled"
+        return
+      end
 
       Rails.application.eager_load!
 
@@ -122,9 +125,13 @@ module Tigron
     end
 
     def initialize_services_subsystem
-      return unless Tigron.run_services?
+      unless Tigron.run_services?
+        Tigron.logger.info "Services are not enabled"
+        return
+      end
 
       Tigron.configuration.fetch(:services, {}).each do |(service_name, properties)|
+        Tigron.logger.info "Registering service: #{service_name}"
         Tigron.register_service(service_name, properties)
       end
     end

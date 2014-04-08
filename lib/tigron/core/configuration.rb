@@ -2,6 +2,9 @@
 
 require 'yaml'
 require 'i18n/core_ext/hash' # deep_symbolize_keys
+require 'active_support/hash_with_indifferent_access'
+# defines nested_under_indifferent_access
+require 'active_support/core_ext/hash'
 
 module Tigron
   class Configuration
@@ -12,7 +15,7 @@ module Tigron
     attr_reader :config
 
     def initialize(configuration)
-      @config = configuration.deep_symbolize_keys
+      @config = normalize_config(configuration)
       normalize_environment
       normalize_messaging
       normalize_jobs
@@ -20,6 +23,10 @@ module Tigron
     end
 
     private
+
+    def normalize_config(config)
+      ActiveSupport::HashWithIndifferentAccess.new(config.deep_symbolize_keys)
+    end
 
     def normalize_environment
       if config[:environment]
@@ -34,6 +41,10 @@ module Tigron
 
     def normalize_messaging
       if config[:messaging]
+        if config[:messaging].has_key?(:default_message_encoding)
+          halt "\"default_message_encoding\" is not supported (messaging)"
+        end
+
         config[:messaging].each do |(queue_name, properties)|
           properties.each do |(processor_name, processor_options)|
             processor_options[:processor] = processor_name.to_s.constantize
@@ -41,19 +52,19 @@ module Tigron
             Integer(processor_options[:concurrency])
             processor_options[:selector] ||= ""
 
-            raise "singleton: true is not supported" if processor_options[:singleton] == true
+            halt "\"singleton: true\" is not supported (messaging)" if processor_options[:singleton] == true
             processor_options[:singleton] = false if processor_options[:singleton].nil?
 
-            raise "durable: true is not supported" if processor_options[:durable] == true
+            halt "\"durable: true\" is not supported (messaging)" if processor_options[:durable] == true
             processor_options[:durable] = false if processor_options[:durable].nil?
 
-            raise "xa: true is not supported" if processor_options[:xa] == true
+            halt "\"xa: true\" is not supported (messaging)" if processor_options[:xa] == true
             processor_options[:xa] = false if processor_options[:xa].nil?
 
-            raise "stopped: true is not supported" if processor_options[:stopped] == true
+            halt "\"stopped: true\" is not supported (messaging)" if processor_options[:stopped] == true
             processor_options[:stopped] = false if processor_options[:stopped].nil?
 
-            raise "synchronous: true is not supported" if processor_options[:synchronous] == true
+            halt "\"synchronous: true\" is not supported (messaging)" if processor_options[:synchronous] == true
             processor_options[:synchronous] = false if processor_options[:synchronous].nil?
           end
         end
@@ -107,6 +118,10 @@ module Tigron
             properties[:job] = properties[:job].to_s.constantize
           end
 
+          if properties[:singleton] == true
+            halt "\"singleton: true\" is not supported (jobs)"
+          end
+
           properties[:concurrent] = false if properties[:concurrent].nil?
           properties[:concurrent] = !!properties[:concurrent]
         end
@@ -127,8 +142,16 @@ module Tigron
             klass = properties[:service].to_s.constantize
             properties[:service] = klass
           end
+
+          if properties[:singleton] == true
+            halt "\"singleton: true\" is not supported (services)"
+          end
         end
       end
+    end
+
+    def halt(message)
+      abort "! Tigron: #{message}"
     end
   end
 end

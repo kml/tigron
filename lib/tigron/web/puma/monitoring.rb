@@ -11,7 +11,8 @@ module Tigron
           puma = options.except(:on_restart, :worker_boot)
 
           puma[:on_restart_count] = options[:on_restart].count
-          puma[:worker_boot_count] = options[:worker_boot].count
+          # FIXME
+          #puma[:worker_boot_count] = options[:worker_boot].count
 
           puma[:min_threads] = Integer(options[:min_threads])
           puma[:max_threads] = Integer(options[:max_threads])

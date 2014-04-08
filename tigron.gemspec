@@ -18,7 +18,7 @@ Gem::Specification.new do |spec|
   spec.test_files    = spec.files.grep(%r{^(test|spec|features)/})
   spec.require_paths = ['lib', 'vendor']
 
-  spec.add_dependency 'puma', '~> 2.5.1'
+  spec.add_dependency 'puma', '~> 2.5'
   spec.add_dependency 'jruby-hornetq'
   spec.add_dependency 'quartz-jruby'
   spec.add_dependency 'jmx'
