@@ -13,7 +13,6 @@ module Tigron
       initialize_registry
       show_banner
       load_all_properties
-      replace_jul_logger
       initialize_cache_service
       initialize_web_service
       initialize_messaging_subsystem
@@ -23,12 +22,6 @@ module Tigron
     end
 
     private
-
-    def replace_jul_logger
-      # http://www.slf4j.org/api/org/slf4j/bridge/SLF4JBridgeHandler.html
-      org.slf4j.bridge.SLF4JBridgeHandler.removeHandlersForRootLogger
-      org.slf4j.bridge.SLF4JBridgeHandler.install
-    end
 
     def initialize_registry
       TorqueBox::Registry.merge!({

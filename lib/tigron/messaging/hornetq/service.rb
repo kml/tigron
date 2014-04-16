@@ -4,8 +4,6 @@ require 'tigron/messaging/hornetq/ext/hornetq/client/transacted_session_pool'
 require 'tigron/messaging/hornetq/worker_pool'
 require 'tigron/messaging/hornetq/monitoring'
 
-require 'tigron/core/torquebox/messaging/message_processor_group'
-
 module Tigron
   module Messaging
     module HornetQ
@@ -24,7 +22,6 @@ module Tigron
         def start(start_context)
           log_hornetq_version
           create_queues
-          register_groups
           start_workers
         end
 
@@ -88,25 +85,14 @@ module Tigron
                   "jms.queue.#{queue_name}",
                   properties[:durable]
                 )
-              rescue org.hornetq.api.core.HornetQQueueExistsException => exception
-                Tigron.logger.warn "#{self.class.name} WARN: #{exception.message}"
-                next
+              rescue Java::org.hornetq.api.core.HornetQException => exception
+                if exception.code == Java::org.hornetq.api.core.HornetQException::QUEUE_EXISTS
+                  Tigron.logger.warn "#{self.class.name} WARN: #{exception.message}"
+                  next
+                end
+
+                raise
               end
-            end
-          end
-        end
-
-        def register_groups
-          Tigron.configuration[:messaging].each do |(queue_name, properties)|
-            queue_name = "jms.queue.#{queue_name}"
-            properties.each do |(processor_name, processor_options)|
-              messaging_service_name = TorqueBox::Messaging::MessageProcessor.__send__(:messaging_service_name)
-
-              destination_name = queue_name
-              class_name = processor_options[:processor]
-              service_name = messaging_service_name.append("#{destination_name}.#{class_name}")
-
-              Tigron.add_service(service_name, TorqueBox::Messaging::MessageProcessorGroup.new(queue_name, processor_name, processor_options))
             end
           end
         end

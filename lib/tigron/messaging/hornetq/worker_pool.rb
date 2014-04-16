@@ -1,8 +1,6 @@
 # encoding: utf-8
 
 require 'tigron/messaging/hornetq/torquebox_message_adapter'
-require 'torquebox/codecs'
-require 'torquebox/messaging/message'
 
 module Tigron
   module Messaging
@@ -65,14 +63,19 @@ module Tigron
 
                   encoding = TorqueBox::Messaging::Message.extract_encoding_from_message(raw_message) || TorqueBox::Messaging::Message::DEFAULT_DECODE_ENCODING
                   processor = processor_class.new
-                  processor.message = :message_not_supported
-                  proxy = TorqueBox::Messaging::MessageProcessor.lookup(queue_name, processor_class.name)
-                  group = proxy.instance_variable_get(:@group)
-                  processor.initialize_proxy(group)
 
                   begin
-                    body = TorqueBox::Codecs.decode(raw_message.body, encoding.to_sym)
+                    body = if encoding.to_s == 'marshal'
+                      Marshal.load(raw_message.body)
+                    else
+                      klass = TorqueBox::Messaging::Message.class_for_encoding(encoding)
+                      message = klass.allocate
+                      message.initialize_from_message(OpenStruct.new(text: raw_message.body))
+                      message.decode
+                    end
+
                     Tigron.logger.debug "encoding: #{encoding} body: #{body}"
+
                     processor.process!(TorqueBoxMessageAdapter.new(body))
                   rescue Exception => exception
                     processor.on_error(exception)

@@ -36,10 +36,6 @@ module Tigron
     end
   end
 
-  def self.logger=(logger)
-    @logger = logger
-  end
-
   def self.configuration
     @configuration ||= Tigron::Configuration.load(Rails.root.join('config/torquebox.yml'))
   end
@@ -86,8 +82,7 @@ module Tigron
   end
 
   def self.add_service(name, service)
-    service_name = name.respond_to?(:append) ? name : TorqueBox::MSC.deployment_unit.service_name.append(name)
-
+    service_name = TorqueBox::MSC.deployment_unit.service_name.append(name)
     service_builder = TorqueBox::Registry['service-registry'].add_service(service_name, service)
     service_builder.install
   end

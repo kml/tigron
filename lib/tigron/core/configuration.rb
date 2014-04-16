@@ -49,6 +49,7 @@ module Tigron
           properties.each do |(processor_name, processor_options)|
             processor_options[:processor] = processor_name.to_s.constantize
             processor_options[:concurrency] ||= 1
+
             Integer(processor_options[:concurrency])
             processor_options[:selector] ||= ""
 

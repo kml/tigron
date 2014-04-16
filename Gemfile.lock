@@ -1,9 +1,9 @@
 GIT
   remote: git://github.com/kml/jruby-hornetq.git
-  revision: cfad61c6ad074d9b0afbe729aa7b5336904a55f3
-  branch: hornetq-2.3.0.cr1
+  revision: 7cb0e7015cc9ff69a80301206a0acb4a4bde829b
+  branch: hornetq-2.2.21.final
   specs:
-    jruby-hornetq (0.5.0.alpha)
+    jruby-hornetq (0.4.0)
       gene_pool (~> 1.3.0)
 
 GIT
@@ -16,55 +16,44 @@ GIT
 PATH
   remote: .
   specs:
-    tigron (0.0.1.pre1)
-      activesupport
+    tigron (0.0.1.pre)
+      activesupport (~> 3.2.1)
+      backports (= 3.3.0)
       gene_pool
       jmx
       jruby-hornetq
-      puma (~> 2.5.1)
+      puma (~> 2.5)
       quartz-jruby
-      torquebox-core (~> 3.0.0)
-      torquebox-messaging (~> 3.0.0)
+      torquebox-core (~> 2.3.2)
+      torquebox-messaging (~> 2.3.2)
 
 GEM
   remote: https://rubygems.org/
   specs:
-    activesupport (4.0.0)
+    activesupport (3.2.17)
       i18n (~> 0.6, >= 0.6.4)
-      minitest (~> 4.2)
-      multi_json (~> 1.3)
-      thread_safe (~> 0.1)
-      tzinfo (~> 0.3.37)
-    atomic (1.1.13)
-    atomic (1.1.13-java)
+      multi_json (~> 1.0)
+    backports (3.3.0)
     blankslate (2.1.2.4)
     edn (1.0.0)
       parslet (~> 1.4.0)
     gene_pool (1.3.0)
-    i18n (0.6.5)
+    i18n (0.6.9)
     jmx (0.9)
-    minitest (4.7.5)
-    multi_json (1.8.0)
+    multi_json (1.9.2)
     parslet (1.4.0)
       blankslate (~> 2.0)
-    puma (2.5.1)
-      rack (>= 1.1, < 2.0)
-    puma (2.5.1-java)
+    puma (2.8.2-java)
       rack (>= 1.1, < 2.0)
     rack (1.5.2)
     rake (10.1.0)
-    thread_safe (0.1.2)
-      atomic
-    thread_safe (0.1.2-java)
-      atomic
-    torquebox-core (3.0.0-java)
+    torquebox-core (2.3.2-java)
+    torquebox-messaging (2.3.2-java)
       edn (= 1.0.0)
-    torquebox-messaging (3.0.0-java)
-      torquebox-core (= 3.0.0)
-      torquebox-transactions (= 3.0.0)
-    torquebox-transactions (3.0.0)
-      torquebox-core (= 3.0.0)
-    tzinfo (0.3.37)
+      torquebox-core (= 2.3.2)
+      torquebox-transactions (= 2.3.2)
+    torquebox-transactions (2.3.2)
+      torquebox-core (= 2.3.2)
 
 PLATFORMS
   java

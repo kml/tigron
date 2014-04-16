@@ -11,6 +11,8 @@ require 'hornetq/client'
 # HornetQ.require_jar('hornetq-core-client')
 # HornetQ.require_jar('netty')
 
+HornetQ.require_jar 'hornetq-logging'
+
 require 'hornetq/client/connection'
 require 'tigron/messaging/hornetq/ext/hornetq'
 
